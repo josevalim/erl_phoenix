@@ -4,6 +4,8 @@
 -define(supervisor, 'Elixir.Supervisor').
 
 start(_Type, _Args) ->
+  erlix_router:compile(erl_phoenix_router),
+
   Children = [
     {'Elixir.Phoenix.PubSub', [{name, erl_phoenix_pubsub}]},
     'Elixir.ErlPhoenixEndpoint'

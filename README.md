@@ -24,13 +24,13 @@ Instead of simply relying on the low-level details and requiring users to implem
 
 We show three different examples of integrations:
 
-  * `erlix_router` - this translates a data-driven router, defined with Erlang records, into Elixir AST. The router is effectively generated on `erl_phoenix_app.erl`.
+  * `erlix_router` - this translates a data-driven router, defined with Erlang records, into Elixir AST. The application router is defined at `src/erl_phoenix_router.erl` and effectively generated inside `src/erl_phoenix_app.erl`. This is, however, just one possible approach. You could mix functions, other data structures, and even your own abstractions (for example, you don't need to stick with Phoenix concept of pipelines)
 
   * `erlix_view` - a module that generates view modules given a template. Written in Elixir for convenience, it could be directly translated to Erlang (or other languages). Note the example app still use .heex templates, but additional templating languages can be added, as many have done in the Elixir community.
 
   * `erlix_live_view` - an Erlang behaviour for Erlang-written LiveViews
 
-For self-contained modules, like the Phoenix Router, as long as a BEAM language has expressive power at compile/build time, it should be possible to hook into Elixir API and generate the relevant source files. For example, while we call `erlix_view` on `src/erl_phoenix_app.erl`, a Rebar3 plugin (or a parse transform), could move the call to compile-time.
+For self-contained modules, like the Phoenix Router, as long as a BEAM language has expressive power at compile/build time, it should be possible to hook into Elixir API and generate the relevant .beam files. For example, while we call `erlix_view` on `src/erl_phoenix_app.erl`, a Mix/Rebar3 plugin (or a parse transform) could move the call to compile-time.
 
 ## Summing up
 
@@ -48,6 +48,6 @@ In relation to the last point in particular, we show that:
 
   * While Elixir does have macros, Elixir macros work on a well-defined and documented Elixir AST, made by regular BEAM data structures. Any language can interact with Elixir macros by translating their data structures into Elixir AST via regular functions. This is what we have done in `src/erlix_router.erl`. You can convert the Elixir AST to .beam either at runtime or compile-time
 
-  * A counter-example to these rules is `Ecto.Query`, which is hard to invoke granularly from other BEAM languages, given `Ecto.Query` goal was designed to write safe, performant, and composable SQL queries at compile-time. Moving `Ecto.Query` to runtime would negate many of its performance and security aspects
+  * A counter-example to these rules is `Ecto.Query`, which is hard to invoke granularly from other BEAM languages, given `Ecto.Query` was designed to write safe, performant, and composable SQL queries at compile-time. Moving `Ecto.Query` to runtime would negate many of its performance and security aspects
 
 Happy holidays!

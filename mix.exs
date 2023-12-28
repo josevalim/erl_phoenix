@@ -32,7 +32,8 @@ defmodule ErlPhoenix.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.7.10"},
+      # A 5LOC patch is required from Phoenix for routes inside scope
+      {:phoenix, "~> 1.7.10", github: "phoenixframework/phoenix", override: true},
       {:phoenix_html, "~> 4.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 0.20.2"},

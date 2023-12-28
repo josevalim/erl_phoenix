@@ -1,5 +1,6 @@
 -module(erl_phoenix_page_controller).
 -export([init/1, call/2]).
+-behaviour('Elixir.Plug').
 -define(conn, 'Elixir.Plug.Conn').
 
 init(Action) ->

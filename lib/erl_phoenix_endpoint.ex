@@ -46,9 +46,9 @@ defmodule ErlPhoenixEndpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
-  plug :dispatch, :index
 
-  defp dispatch(conn, action) do
-    :erl_phoenix_page_controller.call(conn, :erl_phoenix_page_controller.init(action))
-  end
+  # The router is generated at runtime.
+  # But a Mix/rebar3 plugin could move it to compile-time if desired.
+  @compile {:no_warn_undefined, ErlPhoenixRouter}
+  plug ErlPhoenixRouter
 end
