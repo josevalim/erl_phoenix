@@ -2,4 +2,5 @@
 -record(router, {module = nil, imports = [], routes = []}).
 -record(scope, {path = "/", pipe_through = [], routes = []}).
 -record(route, {method = get, path = "/", controller = nil, action = nil}).
+-record(live, {path = "/", view = nil, action = nil}).
 -record(custom, {function = nil, args = []}).

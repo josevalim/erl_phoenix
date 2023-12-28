@@ -16,6 +16,7 @@ router() ->
       #scope{path = "/", pipe_through = [browser], routes = [
         #route{method = get, path = "/", controller = erl_phoenix_page_controller, action = index},
         #route{method = get, path = "/no-view", controller = erl_phoenix_page_controller, action = no_view},
+        #live{path = "/live", view = erl_phoenix_live},
         #custom{function=live_dashboard, args=[<<"/dashboard">>]}
       ]}
     ]

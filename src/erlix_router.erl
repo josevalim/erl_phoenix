@@ -8,8 +8,9 @@ compile(Module) ->
   'Elixir.Module':create(RouterModule, traverse_router(Router, Module), [{file, File}]).
 
 traverse_router(#router{imports=Imports, routes=Routes}, Module) ->
-  Uses = [{use, [], ['Elixir.Phoenix.Router']}],
-  block(Uses ++ traverse_imports([Module | Imports]) ++ traverse_routes(Routes)).
+  AllUses = [{use, [], ['Elixir.Phoenix.Router']}],
+  AllImports = ['Elixir.Phoenix.LiveView.Router', Module | Imports],
+  block(AllUses ++ traverse_imports(AllImports) ++ traverse_routes(Routes)).
 
 traverse_imports(Imports) ->
   [{import, [], [Mod]} || Mod <- Imports].
@@ -22,6 +23,8 @@ traverse_route(#scope{path=Path, pipe_through=Through, routes=Routes}) ->
   {scope, [], [list_to_binary(Path), [{do, block(Inner)}]]};
 traverse_route(#route{method=Method, path=Path, controller=Controller, action=Action}) ->
   {Method, [], [list_to_binary(Path), Controller, Action, [{as, Controller}]]};
+traverse_route(#live{path=Path, view=View, action=Action}) ->
+  {live, [], [list_to_binary(Path), View, Action, [{as, View}]]};
 traverse_route(#custom{function=Fun, args=Args}) ->
   {Fun, [], Args}.
 

@@ -14,7 +14,7 @@ The application entrypoint, router, controllers, and views are written in Erlang
 
   * Rendering a view simply calls a `render/2` function with the template name and the assigns (see `erl_phoenix_error_html.erl`)
 
-  * Channels and LiveViews define a `@behaviour` which we can adhere from any BEAM language that supports behaviours
+  * Channels and LiveViews define a `@behaviour` which we can adhere from any BEAM language that supports behaviours. Currently LiveView requires to implement a `__live__` callback with internals and hopefully this projects helps define a clearer API around that
 
 This means it is easy to replace these layers by any other BEAM language. The only exception here is the `socket/2` macro in the endpoint, which does not currently have a direct translation to runtime APIs. However, this has recently improved with the addition of connetion upgrades to Plug and [`websock_adapter`](https://github.com/phoenixframework/websock_adapter/). For now, the endpoint is written in Elixir, but contributions are certainly welcome to close this gap.
 
@@ -34,7 +34,7 @@ Because Elixir macros work on Elixir AST, and Elixir AST is nothing more the wel
 
 ## Summing up
 
-I hope this gives more nuance to the notion that "Elixir's interop is hard" or that "Phoenix (and additional libs) are mostly macros". In particular:
+I hope this gives more nuance to the notion that "Phoenix (and additional libs) are mostly macros" or that "macros are not usable from other languages". In particular:
 
   * Much of the Elixir tooling, including ExDoc, Hex, and the Elixir compiler, were written with interoperability in mind. The goal is always to contribute upstream whenever possible (instead of relying on non-BEAM languages)
 

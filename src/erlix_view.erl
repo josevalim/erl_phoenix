@@ -2,8 +2,9 @@
 -export([compile/3]).
 
 compile(Module, Root, Path) ->
+  %% Imports could be made an option if desired!
   AST = block([
-    {import, [], ['Elixir.Phoenix.Template']},
+    {use, [], ['Elixir.Phoenix.Component']},
     {embed_templates, [], [list_to_binary(Path), [{root, list_to_binary(Root)}]]}
   ]),
 

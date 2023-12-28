@@ -47,8 +47,7 @@ config :erl_phoenix, ErlPhoenixEndpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
-      ~r"priv/gettext/.*(po)$",
-      ~r"lib/erl_phoenix_web/(controllers|live|components)/.*(ex|heex)$"
+      ~r"priv/templates/.*(heex)$"
     ]
   ]
 
