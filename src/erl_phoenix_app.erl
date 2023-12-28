@@ -5,6 +5,7 @@
 
 start(_Type, _Args) ->
   erlix_router:compile(erl_phoenix_router),
+  erlix_view:compile(erl_phoenix_view, code:lib_dir(erl_phoenix), "priv/templates/*.html"),
 
   Children = [
     {'Elixir.Phoenix.PubSub', [{name, erl_phoenix_pubsub}]},

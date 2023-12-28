@@ -15,6 +15,7 @@ router() ->
     routes = [
       #scope{path = "/", pipe_through = [browser], routes = [
         #route{method = get, path = "/", controller = erl_phoenix_page_controller, action = index},
+        #route{method = get, path = "/no-view", controller = erl_phoenix_page_controller, action = no_view},
         #custom{function=live_dashboard, args=[<<"/dashboard">>]}
       ]}
     ]
@@ -25,7 +26,7 @@ browser(Conn, _Opts) ->
     fun(Conn) -> ?controller:accepts(Conn, [<<"html">>]) end,
     fun ?conn:fetch_session/1,
     fun(Conn) -> ?live_view_router:fetch_live_flash(Conn, []) end,
-    % fun(Conn) -> ?controller:put_root_layout(Conn, [{html, {erl_phoenix_layout_html, root}}]) end,
+    fun(Conn) -> ?controller:put_root_layout(Conn, [{html, {erl_phoenix_view, root}}]) end,
     fun ?controller:protect_from_forgery/1,
     fun ?controller:put_secure_browser_headers/1
   ]).

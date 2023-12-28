@@ -1,4 +1,4 @@
-# ErlPhoenix
+# `erl_phoenix`
 
 This an example of how use Phoenix within Erlang (including code reloading, live dashboard, and live view). Mix is used as the build tool for convenience. To get started:
 
@@ -10,44 +10,44 @@ This an example of how use Phoenix within Erlang (including code reloading, live
 
 The application entrypoint, router, controllers, and views are written in Erlang and placed in the `src/` directory. While Phoenix uses macros, the code generation is contained within modules, and Phoenix relies on a well-defined boundary across all layers. Examples:
 
-  * A controller simply follows the Plug contract (which requires two functions, `init/1` and `call/2`)
+  * A controller simply follows the Plug contract (which requires two functions, `init/1` and `call/2`) (see `erl_phoenix_page_controller.erl`)
 
-  * Rendering a view simply calls a `render/2` function with the template name and the assigns
+  * Rendering a view simply calls a `render/2` function with the template name and the assigns (see `erl_phoenix_error_html.erl`)
 
   * Channels and LiveViews define a `@behaviour` which we can adhere from any BEAM language that supports behaviours
 
-This means it is easy to replace these layers by any other BEAM language. The only exception here is the `socket/2` macro in the endpoint, which does not currently have a direct translation to runtime APIs. However, this has recently improved with the addition of connetion upgrades to Plug and [`websock_adapter`](https://github.com/phoenixframework/websock_adapter/) and should now be feasible. For now, the endpoint is written in Elixir, but bontributions are certainly welcome to close this gap.
+This means it is easy to replace these layers by any other BEAM language. The only exception here is the `socket/2` macro in the endpoint, which does not currently have a direct translation to runtime APIs. However, this has recently improved with the addition of connetion upgrades to Plug and [`websock_adapter`](https://github.com/phoenixframework/websock_adapter/). For now, the endpoint is written in Elixir, but contributions are certainly welcome to close this gap.
 
 ## Going further
 
-Instead of simply relying on the low-level details and requiring users to implement their own router and views, this project also implements a thin binding layer, called `erlix`, which could be used if someone wants to provide high-lever bindings for using Phoenix from Erlang.
+Instead of simply relying on the low-level details, we can also build abstractions on top of Phoenix, even from Erlang! This project implements a thin binding layer, called `erlix`, which could be used if someone wants to provide high-lever bindings for using Phoenix from Erlang.
 
 We show three different examples of integrations:
 
-  * `erlix_router` - this translates a data-driven router, defined with Erlang records, into Elixir AST. The application router is defined at `src/erl_phoenix_router.erl` and effectively generated inside `src/erl_phoenix_app.erl`. This is, however, just one possible approach. You could mix functions, other data structures, and even your own abstractions (for example, you don't need to stick with Phoenix concept of pipelines)
+  * `erlix_router` - this translates a data-driven router, defined with Erlang records, into Elixir AST. You can find an example at `src/erl_phoenix_router.erl`. This is, however, just one possible approach. You could mix functions, other data structures, and even your own abstractions
 
-  * `erlix_view` - a module that generates view modules given a template. Written in Elixir for convenience, it could be directly translated to Erlang (or other languages). Note the example app still use .heex templates, but additional templating languages can be added, as many have done in the Elixir community.
+  * `erlix_view` - a module that generates view modules given a template. Note the example app still use .heex templates, but additional templating languages can be added, as many have done in the Elixir community
 
   * `erlix_live_view` - an Erlang behaviour for Erlang-written LiveViews
 
-For self-contained modules, like the Phoenix Router, as long as a BEAM language has expressive power at compile/build time, it should be possible to hook into Elixir API and generate the relevant .beam files. For example, while we call `erlix_view` on `src/erl_phoenix_app.erl`, a Mix/Rebar3 plugin (or a parse transform) could move the call to compile-time.
+Because Elixir macros work on Elixir AST, and Elixir AST is nothing more the well-defined data structures, any BEAM language can manipulate them! While we call `erlix_view`/`erlix_router` on `src/erl_phoenix_app.erl`, a Mix/Rebar3 plugin (or a parse transform) could move the call to compile-time if desired.
 
 ## Summing up
 
-I hope this gives more nuance to the notion that "Elixir's interop is hard" or that "Phoenix (and additional libs) are mostly macros".
+I hope this gives more nuance to the notion that "Elixir's interop is hard" or that "Phoenix (and additional libs) are mostly macros". In particular:
 
   * Much of the Elixir tooling, including ExDoc, Hex, and the Elixir compiler, were written with interoperability in mind. The goal is always to contribute upstream whenever possible (instead of relying on non-BEAM languages)
 
   * Many Elixir projects are built on top of their runtime APIs: going from Plug and Broadway, to more recent projects such as Nx and Explorer. Livebook, for example, integrate Elixir and Erlang into a single execution
 
-  * While macros add complexity, they can many times still be incorporated into other languages by adding a layer between the languages, similar to a FFI layer
+  * While macros add a layer on top of interoperability, they can many times still be incorporated into other languages with some additional transformation (similar to FFIs)
 
 In relation to the last point in particular, we show that:
 
-  * While Phoenix uses macros, the huge majority of them are contained adhere to well-defined APIs, which any BEAM language can hook into, as shown in `Plug` and `erlix_live_view.erl`
+  * While Phoenix uses macros, the huge majority of them are contained to modules and adhere to well-defined APIs, which any BEAM language can hook into, as shown in plugs, controllers, views, and live views
 
-  * While Elixir does have macros, Elixir macros work on a well-defined and documented Elixir AST, made by regular BEAM data structures. Any language can interact with Elixir macros by translating their data structures into Elixir AST via regular functions. This is what we have done in `src/erlix_router.erl`. You can convert the Elixir AST to .beam either at runtime or compile-time
+  * Macros are nothing more than data manipulation at compile-time, which can be leveraged by other BEAM languages and tools. This is what we have done in `src/erlix_router.erl` and `src/elixir_view.wel`. At the end of the day, you can convert the Elixir AST to `.beam` either at runtime or compile-time
 
-  * A counter-example to these rules is `Ecto.Query`, which is hard to invoke granularly from other BEAM languages, given `Ecto.Query` was designed to write safe, performant, and composable SQL queries at compile-time. Moving `Ecto.Query` to runtime would negate many of its performance and security aspects
+  * A counter-example is `Ecto.Query`, which is hard to invoke granularly from other BEAM languages, given `Ecto.Query` was designed to write safe, performant, and composable SQL queries at compile-time. Moving `Ecto.Query` to runtime would negate many of its performance and security aspects
 
 Happy holidays!
