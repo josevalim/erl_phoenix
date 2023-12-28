@@ -28,7 +28,7 @@ We show three different examples of integrations:
 
   * `erlix_view` - a module that generates view modules given a template. Note the example app still use .heex templates, but additional templating languages can be added, as many have done in the Elixir community
 
-  * `erlix_live_view` - an Erlang behaviour for Erlang-written LiveViews
+  * `erlix_live_view` (coming soon) - an Erlang behaviour for Erlang-written LiveViews
 
 Because Elixir macros work on Elixir AST, and Elixir AST is nothing more the well-defined data structures, any BEAM language can manipulate them! While we call `erlix_view`/`erlix_router` on `src/erl_phoenix_app.erl`, a Mix/Rebar3 plugin (or a parse transform) could move the call to compile-time if desired.
 
