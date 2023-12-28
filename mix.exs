@@ -34,9 +34,10 @@ defmodule ErlPhoenix.MixProject do
     [
       # A 5LOC patch is required from Phoenix for routes inside scope
       {:phoenix, "~> 1.7.10", github: "phoenixframework/phoenix", override: true},
+      # Exports an official __live__ callback
+      {:phoenix_live_view, "~> 0.20.2", path: "../phoenix_live_view", override: true},
       {:phoenix_html, "~> 4.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.20.2"},
       {:floki, ">= 0.30.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.8.3"},
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
