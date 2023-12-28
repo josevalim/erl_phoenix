@@ -1,6 +1,6 @@
 # ErlPhoenix
 
-This an example of how use Phoenix within Erlang (code reloading included). Mix is used as the build tool for convenience:
+This an example of how use Phoenix within Erlang (including code reloading, live dashboard, and live view). Mix is used as the build tool for convenience. To get started:
 
   * Run `mix setup` to install and setup dependencies
   * Start Phoenix endpoint with `mix phx.server`

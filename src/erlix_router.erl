@@ -21,6 +21,8 @@ traverse_route(#scope{path=Path, pipe_through=Through, routes=Routes}) ->
   Inner = [{pipe_through, [], Through} | traverse_routes(Routes)],
   {scope, [], [list_to_binary(Path), [{do, block(Inner)}]]};
 traverse_route(#route{method=Method, path=Path, controller=Controller, action=Action}) ->
-  {Method, [], [list_to_binary(Path), Controller, Action, [{as, Controller}]]}.
+  {Method, [], [list_to_binary(Path), Controller, Action, [{as, Controller}]]};
+traverse_route(#custom{function=Fun, args=Args}) ->
+  {Fun, [], Args}.
 
 block(List) when is_list(List) -> {'__block__', [], List}.

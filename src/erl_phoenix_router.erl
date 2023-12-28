@@ -14,7 +14,8 @@ router() ->
     imports = ['Elixir.Phoenix.LiveDashboard.Router'],
     routes = [
       #scope{path = "/", pipe_through = [browser], routes = [
-        #route{method = get, path = "/", controller = erl_phoenix_page_controller, action = index}
+        #route{method = get, path = "/", controller = erl_phoenix_page_controller, action = index},
+        #custom{function=live_dashboard, args=[<<"/dashboard">>]}
       ]}
     ]
   }.
