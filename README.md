@@ -40,7 +40,9 @@ Hopefully this repository moves the conversation forward with practical examples
 
 I hope this gives more nuance to the notion that "Elixir's interop is poor" or "Phoenix (and additional libs) are mostly macros". In particular:
 
-  * Much of the Elixir tooling, including ExDoc, Hex, and the Elixir compiler, were written with interoperability in mind. The goal is always to contribute upstream whenever possible (instead of relying on non-BEAM languages)
+  * Elixir, by design, shares most of its compiler and process abstractions with Erlang/OTP, instead of rolling its own. In many situations, the best way to speed up the compiler or to add a feature to Elixir's GenServer is by contributing it upstream
+  
+  * Much of the Elixir tooling, including ExDoc and Hex, were written with interoperability in mind. Packages from any BEAM language can be published to Hex. Erlang (and potentially other BEAM languages) can use ExDoc to generate documentation. The Erlang terminal can show Elixir docs (and vice-versa). Etc
 
   * Many Elixir projects are built on top of their runtime APIs: going from Plug and Broadway, to more recent projects such as Nx and Explorer. Livebook, for example, integrate Elixir and Erlang into a single execution
 
@@ -50,7 +52,7 @@ In relation to the last point in particular, we show that:
 
   * While Phoenix uses macros, the huge majority of them are contained to modules and adhere to well-defined APIs, which any BEAM language can hook into, as shown in plugs, controllers, views, and live views
 
-  * Macros are nothing more than data manipulation at compile-time, which can be leveraged by other BEAM languages and tools. This is what we have done in `src/erlix_router.erl` and `src/elixir_view.erl`. At the end of the day, you can convert data structures into Elixir AST and then into `.beam` by using Elixir APIs, either at runtime or compile-time
+  * Macros are nothing more than data manipulation at compile-time, which can be leveraged by other BEAM languages and tools. This is what we have done in `src/erlix_router.erl` and `src/elixir_view.erl`. At the end of the day, you can convert data structures into Elixir AST and then into `.beam` by using Elixir APIs, either at runtime or compile-time. It is yet unclear how useful this can be in practice though
 
   * A counter-example is `Ecto.Query`, which is hard to invoke granularly from other BEAM languages, given `Ecto.Query` was designed to write safe, performant, and composable SQL queries at compile-time. Moving `Ecto.Query` to runtime would negate many of its performance and security aspects
 
